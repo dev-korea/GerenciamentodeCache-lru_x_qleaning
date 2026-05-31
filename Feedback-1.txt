@@ -1,0 +1,29 @@
+LRU x QL Float x QL Fixed
+Boa Localidade: 75 / 75 / 75
+Conflito Forte: 0 / 11.11 / 11.11
+Misto: 25 / 41.67 / 41.67
+
+“A versão fixed-point apresentou resultados equivalentes à versão em ponto flutuante nos traces avaliados, indicando que a representação inteira é adequada para a próxima etapa de aproximação com hardware.”
+
+
+Boa localidade
+
+É um trace onde poucos endereços se repetem várias vezes.
+A cache consegue guardar esses blocos e reutilizar depois.
+Ideia: cenário favorável para a cache.
+Esperado: muitos hits.
+
+Conflito forte
+
+É um trace onde vários endereços diferentes caem no mesmo conjunto da cache.
+Como a L1 tem só 2 vias, mas 3 blocos ficam disputando o mesmo conjunto, ocorre substituição constante.
+
+Ideia: cenário ruim para a cache.
+Esperado: muitos misses, principalmente no LRU.
+
+Trace misto
+
+É um trace que mistura repetição com interferência.
+Tem momentos em que os dados se repetem, mas também entram outros blocos que atrapalham a cache.
+Ideia: cenário intermediário e mais realista.
+Esperado: alguns hits e alguns misses.

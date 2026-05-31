@@ -1,0 +1,30 @@
+===== RELATORIO DE CUSTO DA Q-TABLE =====
+
+Configuracao atual:
+N_SETS       : 64
+REDUCED_TAGS : 16
+WAYS         : 2
+Entradas Q   : 2048
+
+Bits por Q-value | Total bits | Total bytes | Total KB
+------------------------------------------------------
+               8 |      16384 |     2048.00 |     2.00 KB
+              12 |      24576 |     3072.00 |     3.00 KB
+              16 |      32768 |     4096.00 |     4.00 KB
+              24 |      49152 |     6144.00 |     6.00 KB
+              32 |      65536 |     8192.00 |     8.00 KB
+
+Analise:
+- Aumentar os bits aumenta a precisao dos valores Q.
+- Mais bits reduzem perdas por quantizacao no fixed-point.
+- Porem, mais bits aumentam area ocupada no FPGA.
+- Comparadores, somadores e multiplicadores tambem ficam maiores.
+- Isso pode aumentar a latencia ou reduzir a frequencia maxima.
+- Para a etapa atual, 16 bits signed e uma escolha equilibrada.
+
+Parametros fixed-point atuais:
+SCALE       : 1000
+alpha       : 100  equivale a 0.100
+gamma       : 900  equivale a 0.900
+reward hit  : +1000
+reward miss : -1000

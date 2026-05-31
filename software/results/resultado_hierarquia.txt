@@ -1,0 +1,59 @@
+=== AVALIACAO HIERARQUIA L1 + L2 ===
+
+Configuracao L1: 4096 bytes | bloco 32 | 2 vias
+Configuracao L2: 32768 bytes | bloco 64 | 8 vias
+
+===== TRACE: Streaming sequencial =====
+L1 LRU + L2 LRU
+L1 -> Hits: 0 | Misses: 32 | HitRate: 0.00%
+L2 -> Hits: 16 | Misses: 16 | HitRate: 50.00%
+Acessos a memoria principal: 16
+
+L1 Q-Learning Fixed + L2 LRU
+L1 -> Hits: 0 | Misses: 32 | HitRate: 0.00%
+L2 -> Hits: 16 | Misses: 16 | HitRate: 50.00%
+Acessos a memoria principal: 16
+
+===== TRACE: Hotset / boa localidade =====
+L1 LRU + L2 LRU
+L1 -> Hits: 28 | Misses: 4 | HitRate: 87.50%
+L2 -> Hits: 2 | Misses: 2 | HitRate: 50.00%
+Acessos a memoria principal: 2
+
+L1 Q-Learning Fixed + L2 LRU
+L1 -> Hits: 28 | Misses: 4 | HitRate: 87.50%
+L2 -> Hits: 2 | Misses: 2 | HitRate: 50.00%
+Acessos a memoria principal: 2
+
+===== TRACE: Conflito forte na L1 =====
+L1 LRU + L2 LRU
+L1 -> Hits: 0 | Misses: 24 | HitRate: 0.00%
+L2 -> Hits: 21 | Misses: 3 | HitRate: 87.50%
+Acessos a memoria principal: 3
+
+L1 Q-Learning Fixed + L2 LRU
+L1 -> Hits: 6 | Misses: 18 | HitRate: 25.00%
+L2 -> Hits: 15 | Misses: 3 | HitRate: 83.33%
+Acessos a memoria principal: 3
+
+===== TRACE: Misto =====
+L1 LRU + L2 LRU
+L1 -> Hits: 6 | Misses: 10 | HitRate: 37.50%
+L2 -> Hits: 4 | Misses: 6 | HitRate: 40.00%
+Acessos a memoria principal: 6
+
+L1 Q-Learning Fixed + L2 LRU
+L1 -> Hits: 7 | Misses: 9 | HitRate: 43.75%
+L2 -> Hits: 3 | Misses: 6 | HitRate: 33.33%
+Acessos a memoria principal: 6
+
+===== TRACE: Reuso com interferencia =====
+L1 LRU + L2 LRU
+L1 -> Hits: 6 | Misses: 10 | HitRate: 37.50%
+L2 -> Hits: 4 | Misses: 6 | HitRate: 40.00%
+Acessos a memoria principal: 6
+
+L1 Q-Learning Fixed + L2 LRU
+L1 -> Hits: 7 | Misses: 9 | HitRate: 43.75%
+L2 -> Hits: 3 | Misses: 6 | HitRate: 33.33%
+Acessos a memoria principal: 6

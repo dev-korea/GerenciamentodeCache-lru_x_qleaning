@@ -1,0 +1,10 @@
+benchmark,acessos,lru_l1_hits,lru_l1_misses,lru_l1_hitrate,lru_l2_hits,lru_l2_misses,lru_l2_hitrate,lru_memoria,ql_l1_hits,ql_l1_misses,ql_l1_hitrate,ql_l2_hits,ql_l2_misses,ql_l2_hitrate,ql_memoria,ganho_l1_pp
+Streaming sequencial,512,0,512,0.00,256,256,50.00,256,0,512,0.00,256,256,50.00,256,0.00
+Hotset pequeno,512,508,4,99.22,2,2,50.00,2,508,4,99.22,2,2,50.00,2,0.00
+Conflito forte L1,512,0,512,0.00,509,3,99.41,3,162,350,31.64,347,3,99.14,3,31.64
+Reuso com interferencia,512,316,196,61.72,190,6,96.94,6,352,160,68.75,154,6,96.25,6,7.03
+Matriz varredura por linha,1024,896,128,87.50,64,64,50.00,64,896,128,87.50,64,64,50.00,64,0.00
+Matriz varredura por coluna,1024,896,128,87.50,64,64,50.00,64,896,128,87.50,64,64,50.00,64,0.00
+Misto maior,512,282,230,55.08,222,8,96.52,8,304,208,59.38,200,8,96.15,8,4.30
+Linked List simulada,512,0,512,0.00,124,388,24.22,388,0,512,0.00,124,388,24.22,388,0.00
+Pattern Search,2048,2014,34,98.34,16,18,47.06,18,2014,34,98.34,16,18,47.06,18,0.00

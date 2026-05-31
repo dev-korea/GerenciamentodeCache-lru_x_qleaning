@@ -1,0 +1,18 @@
+=== COMPARACAO LRU x Q-LEARNING ===
+
+===== TRACE: Boa Localidade =====
+LRU         -> Hits: 6 | Misses: 2 | HitRate: 75.00%
+Q-Learning  -> Hits: 6 | Misses: 2 | HitRate: 75.00%
+
+===== TRACE: Conflito Forte =====
+LRU         -> Hits: 0 | Misses: 9 | HitRate: 0.00%
+Q-Learning  -> Hits: 1 | Misses: 8 | HitRate: 11.11%
+
+===== TRACE: Misto =====
+LRU         -> Hits: 3 | Misses: 9 | HitRate: 25.00%
+Q-Learning  -> Hits: 5 | Misses: 7 | HitRate: 41.67%
+
+Exemplo final de estados aprendidos (ultimo trace):
+Q[set=0][rtag=0] = [0.119, 0.000]
+Q[set=0][rtag=1] = [0.000, 0.009]
+Q[set=0][rtag=2] = [-0.199, -0.100]
