@@ -46,8 +46,8 @@ hardware/
 │   ├── address_splitter.v      # [✓] Decomposição de endereço
 │   ├── cache_array.v           # [✓] Array de cache (valid, tag, hit, fill)
 │   ├── lru_ctrl.v              # [✓] Controlador LRU parametrizável
-│   ├── q_table.v               # [ ] BRAM da Q-table
-│   ├── ql_update.v             # [ ] ALU de atualização Q-Learning
+│   ├── q_table.v               # [✓] Memória da Q-table (leitura/escrita síncronas)
+│   ├── ql_update.v             # [✓] ALU de atualização Q-Learning (combinacional)
 │   ├── ql_policy.v             # [ ] Política ε-greedy + argmax
 │   ├── victim_select.v         # [ ] Mux: LRU vs QL
 │   ├── cache_fsm.v             # [ ] FSM principal de acesso
@@ -111,18 +111,53 @@ Armazena `ordem_vec[set]`: vetor empacotado onde `slot[0]` = LRU (vítima) e `sl
 
 ---
 
-## Módulos planejados
+---
 
 ### `q_table.v`
-BRAM dual-port indexada por `(set, reduced_tag, way)`. Suporte a leitura e escrita síncronas, com porta de leitura antecipada para o argmax.
+
+Memória da Q-table indexada por `(set, rtag, way)`. Equivale ao campo `q_table` de `QLearningFixed` em C.
+
+```
+Parâmetros: N_SETS=64, REDUCED_TAGS=16, WAYS=2|8, DATA_WIDTH=32
+Entradas:   clk, rst
+            rd_en, rd_set, rd_rtag          (leitura — latência 1 ciclo)
+            wr_en, wr_set, wr_rtag, wr_way, wr_data  (escrita — síncrona)
+Saídas:     rd_data[WAYS*DATA_WIDTH-1:0]    (todos os Q-values para o (set,rtag) lido)
+            rd_valid                         (pulso: 1 ciclo após rd_en)
+```
+
+- Leitura retorna todas as WAYS Q-values de uma vez → `ql_update` recebe os dados sem acesso adicional.
+- Inicialização via `initial` block (simulação) e BRAM init no FPGA (default 0).
+
+---
 
 ### `ql_update.v`
-ALU que implementa a equação de atualização Q-Learning:
+
+ALU combinacional de atualização Q-Learning. Equivale a `ql_fixed_update()` / `qlfd_update()` em C.
+
 ```
-target = reward + (gamma × best_next) >> 10
-diff   = target − old_q
-new_q  = old_q + (alpha × diff) >> 10
+Parâmetros: WAYS, DATA_WIDTH=32, SCALE_BITS=10, ALPHA=100, GAMMA=900,
+            REWARD_HIT=1024, REWARD_MISS=-1024
+Entradas:   q_vals[WAYS*DATA_WIDTH-1:0]   (saída de rd_data do q_table)
+            action[$clog2(WAYS)-1:0]       (via selecionada)
+            is_hit                          (1=acerto, 0=falta)
+Saídas:     new_q[DATA_WIDTH-1:0]          (Q-value atualizado para action)
+            best_way[$clog2(WAYS)-1:0]     (argmax — alimenta o ql_policy)
 ```
+
+Equação (aritmética com sinal, shifts para divisão):
+```
+best_q  = max(q_vals[0 .. WAYS-1])
+target  = reward + (GAMMA × best_q) >> SCALE_BITS
+diff    = target − old_q
+new_q   = old_q + (ALPHA × diff) >> SCALE_BITS
+```
+
+Multiplicações 32×32→64 bits — mapeadas automaticamente para DSPs no FPGA.
+
+---
+
+## Módulos planejados
 
 ### `ql_policy.v`
 Seleção de ação ε-greedy: LFSR de 8 bits gera aleatoriedade; se `lfsr[7:1] < epsilon` → exploração (via aleatória); caso contrário → `argmax(Q[set][rtag][*])`.
